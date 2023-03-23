@@ -13,7 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.matheus.springkafka.dtos.KafkaDTO;
+import com.matheus.springkafka.dtos.UserDTO;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -21,23 +21,7 @@ public class KafkaProducerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, "20971520");
-
-        return new DefaultKafkaProducerFactory<>(configProps);
-    }
-
-    @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    @Bean
-    public ProducerFactory<String, KafkaDTO> kafkaProducerFactory() {
+    public ProducerFactory<String, UserDTO> kafkaProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -46,7 +30,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, KafkaDTO> kafkaKafkaTemplate() {
+    public KafkaTemplate<String, UserDTO> kafkaKafkaTemplate() {
         return new KafkaTemplate<>(kafkaProducerFactory());
     }
 }

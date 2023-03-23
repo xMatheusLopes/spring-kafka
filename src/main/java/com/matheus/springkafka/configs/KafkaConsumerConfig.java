@@ -14,7 +14,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.matheus.springkafka.dtos.KafkaDTO;
+import com.matheus.springkafka.dtos.UserDTO;
 
 @EnableKafka
 @Configuration
@@ -22,34 +22,17 @@ public class KafkaConsumerConfig {
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    public ConsumerFactory<String, String> consumerFactory(String groupId) {
+    public ConsumerFactory<String, UserDTO> UserDTOConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, "20971520");
-        props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, "20971520");
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
-    
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(String groupId) {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory(groupId));
-        return factory;
-    }
-
-    public ConsumerFactory<String, KafkaDTO> kafkaDtoConsumerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "app");
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(KafkaDTO.class));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "user");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(UserDTO.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaDTO> kafkaDtoKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, KafkaDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(kafkaDtoConsumerFactory());
+    public ConcurrentKafkaListenerContainerFactory<String, UserDTO> UserDTOKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, UserDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(UserDTOConsumerFactory());
         return factory;
     }
 }

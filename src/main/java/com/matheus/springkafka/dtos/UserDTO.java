@@ -1,13 +1,13 @@
 package com.matheus.springkafka.dtos;
 
-public class KafkaDTO {
+public class UserDTO {
     
     private String name;
     private int age;
 
-    public KafkaDTO() {}
+    public UserDTO() {}
 
-    public KafkaDTO(String name, int age) {
+    public UserDTO(String name, int age) {
         this.name = name;
         this.age = age;
     }
