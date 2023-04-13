@@ -46,6 +46,7 @@ public class UserController implements ConsumerSeekAware {
 
     public void onPartitionsAssigned(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
         long timestamp = System.currentTimeMillis()+60*1000;
+        // long timestamp = 1681245088000L;
         System.out.println("Search for a time that is great or equal then {}" + timestamp);
         callback.seekToTimestamp(new ArrayList<>(assignments.keySet()), timestamp);
     }
