@@ -22,11 +22,15 @@ public class KafkaConsumerConfig {
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    public ConsumerFactory<String, UserDTO> UserDTOConsumerFactory() {
+    private Map<String, Object> configProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "user");
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(UserDTO.class));
+        return props;
+    }
+
+    public ConsumerFactory<String, UserDTO> UserDTOConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(configProps(), new StringDeserializer(), new JsonDeserializer<>(UserDTO.class));
     }
 
     @Bean
